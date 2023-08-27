@@ -395,12 +395,12 @@
                     $(".menu_close").click(function () {
                         $(".menu_mb").removeClass("show");
                     });
-                    $("#wpcf7_form_1,#wpcf7_form_2").validate({
+                    $("#wpcf7_form_1").validate({
                             onfocusout: false,
                             onkeyup: false,
                             onclick: false,
                             rules: {
-                                "full_name": {
+                                "customerName": {
                                     required: true,
                                 },
                                 "phone": {
@@ -422,7 +422,55 @@
                                 }
                             },
                             messages: {
-                                "full_name": {
+                                "customerName": {
+                                    required: "Khách hàng vui lòng nhập tên",
+                                },
+                                "phone": {
+                                    required: "Khách hàng vui lòng nhập số điện thoại",
+                                    minlength: "Số điện thoại tối thiểu có 10 chữ số",
+                                    maxlength: "Số điện thoại tối tối đa 15 chữ số",
+                                    number:"Khách hàng hãy nhập số điện thoại đúng định dạng"
+                                },
+                                "intent": {
+                                    required: "Khách hàng vui lòng chọn mục đích",
+                                },
+                                "amount": {
+                                    required: "Khách hàng vui lòng nhập số tiền cần",
+                                    digits: "Số tiền phải lớn hơn 0"
+                                },
+                                "asset": {
+                                    required: "Khách hàng vui lòng chọn tài sản thế chấp",
+                                }
+                            }
+                        });
+                        $("#wpcf7_form_2").validate({
+                            onfocusout: false,
+                            onkeyup: false,
+                            onclick: false,
+                            rules: {
+                                "customerName": {
+                                    required: true,
+                                },
+                                "phone": {
+                                    required: true,
+                                    // validatePassword: true,
+                                    minlength: 10,
+                                    maxlength: 13,
+                                    number:true
+                                },
+                                "intent": {
+                                    required: true,
+                                },
+                                "amount": {
+                                    required: true,
+                                    digits:true
+                                },
+                                "asset": {
+                                    required: true,
+                                }
+                            },
+                            messages: {
+                                "customerName": {
                                     required: "Khách hàng vui lòng nhập tên",
                                 },
                                 "phone": {
@@ -445,25 +493,54 @@
                         });
                     $('#wpcf7_form_1,#wpcf7_form_2').submit(function (e) {
                         e.preventDefault();
+                        $('#' + e.target.getAttribute('id')).find('.result_response').html('')
                         if (!$('#' + e.target.getAttribute('id')).valid()) return;
-                        var data = $('#' + e.target.getAttribute('id') + ' :input').serializeArray();
-
-                        console.log(data);
-                        $.ajax({
-                            url: "the url to post",
-                            data: data,
-                            processData: false,
-                            contentType: false,
-                            type: 'POST',
-                            success: function (data) {
-                                alert(data);
-                            },
-                            error: function (xhrRequest, status, error) {
-                                // alert(JSON.stringify(xhrRequest));
-                                console.log(error);
+                        var formCreate = new FormData($('#' + e.target.getAttribute('id'))[0]);
+                        const formObject = Object.fromEntries(formCreate);
+                        console.log(formObject);
+                        var settings = {
+                        "url": "http://103.107.183.175:8091/api/system/finance-customer/create",
+                        "method": "POST",
+                        "timeout": 0,
+                        "headers": {
+                            "Content-Type": "application/x-www-form-urlencoded"
+                        },
+                        "data": formObject
+                        };
+                        $.ajax(settings).done(function (response) {
+                            $('#' + e.target.getAttribute('id')).trigger("reset");
+                            if (response.code == 200) {
+                                $('#' + e.target.getAttribute('id')).find('.result_response').append('<div class="wpcf7-response-output" style="color: white;" aria-hidden="true">Xin cảm ơn, form đã được gửi thành công.</div>')
+                            } else {
+                                $('#' + e.target.getAttribute('id')).find('.result_response').append('<div class="wpcf7-response-output" style="border-color: #ffb900;color: white;" aria-hidden="true">Có một hoặc nhiều mục nhập có lỗi. Vui lòng kiểm tra và thử lại.</div>')
                             }
+                        }).fail(function (response) {
+                            $('#' + e.target.getAttribute('id')).find('.result_response').append('<div class="wpcf7-response-output" style="border-color: #ffb900;color: white;" aria-hidden="true">Có một hoặc nhiều mục nhập có lỗi. Vui lòng kiểm tra và thử lại.</div>')
                         });
+                        // $.ajax({
+                        //     url: "http://localhost:8091/api/system/finance-customer/create",
+                        //     data: JSON.stringify(formObject),
+                        //     type: 'POST',
+                        //     dataType : "html",
+                        //     contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+                        //     success: function (response) {
+                        //        console.log(e.target.getAttribute('id'));
+                        //     //    $('#' + e.target.getAttribute('id')).trigger("reset");
+                        //        if(response.code == 200){
+                        //         $('#' + e.target.getAttribute('id')).find('.result_response').append('<div class="wpcf7-response-output" style="color: white;" aria-hidden="true">Xin cảm ơn, form đã được gửi thành công.</div>')
+                        //        }else{
+                        //         $('#' + e.target.getAttribute('id')).find('.result_response').append('<div class="wpcf7-response-output" style="border-color: #ffb900;color: white;" aria-hidden="true">Có một hoặc nhiều mục nhập có lỗi. Vui lòng kiểm tra và thử lại.</div>')
+                        //        }
+                        //     },
+                        //     error: function (xhrRequest, status, error) {
+                        //         // alert(JSON.stringify(xhrRequest));
+                        //         $('#' + e.target.getAttribute('id')).find('.result_response').append('<div class="wpcf7-response-output" style="border-color: #ffb900;color: white;" aria-hidden="true">Có một hoặc nhiều mục nhập có lỗi. Vui lòng kiểm tra và thử lại.</div>')
+                        //         console.log(error);
+                        //     }
+                        // });
                     })
+                    
+                                    
                     //  $.validator.addMethod("validatePassword", function (value, element) {
                     //      return this.optional(element) || /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$/i.test(value);
                     // }, "Hãy nhập password từ 8 đến 16 ký tự bao gồm chữ hoa, chữ thường và ít nhất một chữ số");
@@ -1279,23 +1356,25 @@
                                             <p role="status" aria-live="polite" aria-atomic="true"></p>
                                             <ul></ul>
                                         </div>
-                                        <form action="" method="post" class="wpcf7-form init" id="wpcf7_form_1">
+                                        <form action="" method="post" id="wpcf7_form_1">
+                                            <input type="hidden" name="projectId" value="3">
                                             <h3>ĐĂNG KÝ ĐỂ NHẬN TƯ VẤN LÃI SUẤT VÀ HỒ SƠ
                                             </h3>
                                             <h4>Không hỗ trợ các khoản tiêu dùng tín chấp
                                             </h4>
                                             <p><span class="wpcf7-form-control-wrap" data-name="text-841">
-                                                <input size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" aria-required="true" aria-invalid="false" placeholder="Họ và tên" value="" type="text" name="full_name" /></span><br
+                                                <input size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" aria-required="true" aria-invalid="false" placeholder="Họ và tên" value="" type="text" name="customerName" /></span><br
                                                 />
                                                 <span class="wpcf7-form-control-wrap" data-name="tel-63">
                                                     <input size="40" class="wpcf7-form-control wpcf7-text wpcf7-tel wpcf7-validates-as-tel" aria-invalid="false" placeholder="Số điện thoại" value="" type="tel" name="phone" /></span><br
                                                 />
                                                 <span class="wpcf7-form-control-wrap" data-name="menu-531">
                                                     <select class="wpcf7-form-control wpcf7-select" aria-invalid="false" name="intent">
-                                                        <option value="1">kinh doanh</option>
-                                                        <option value="2">mua sửa nhà</option>
-                                                        <option value="3">mua ô tô</option>
-                                                        <option value="4">đầu tư</option>
+                                                        <option value="1">Chọn mục đính vay</option>
+                                                        <option value="2">kinh doanh</option>
+                                                        <option value="3">mua sửa nhà</option>
+                                                        <option value="4">mua ô tô</option>
+                                                        <option value="5">đầu tư</option>
                                                     </select>
                                                 </span><br
                                                 />
@@ -1313,7 +1392,9 @@
                                                 />
                                                 <input class="wpcf7-form-control has-spinner wpcf7-submit animation_btn submit_1" type="submit" value="Đăng ký miễn phí" />
                                             </p>
-                                            <div class="wpcf7-response-output" aria-hidden="true"></div>
+                                            <div class="result_response">
+
+                                            </div>
                                         </form>
                                     </div>
                                 </div>
@@ -1364,6 +1445,7 @@
                                     <ul></ul>
                                 </div>
                                 <form action="" method="post" id="wpcf7_form_2">
+                                    <input type="hidden" name="projectId" value="3">
                                     <h3>ĐĂNG KÝ ĐỂ NHẬN TƯ VẤN LÃI SUẤT VÀ HỒ SƠ
                                     </h3>
                                     <h4>Không hỗ trợ các khoản tiêu dùng tín chấp
@@ -1371,17 +1453,18 @@
                                     <p><span class="wpcf7-form-control-wrap" data-name="text-841">
                                             <input size="40"
                                                     class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" aria-required="true" aria-invalid="false"
-                                                    placeholder="Họ và tên" value="" type="text" name="full_name" /></span><br />
+                                                    placeholder="Họ và tên" value="" type="text" name="customerName" /></span><br />
                                         <span class="wpcf7-form-control-wrap" data-name="tel-63">
                                             <input size="40"
                                                 class="wpcf7-form-control wpcf7-text wpcf7-tel wpcf7-validates-as-tel" aria-invalid="false"
                                                 placeholder="Số điện thoại" value="" type="tel" name="phone" /></span><br />
                                         <span class="wpcf7-form-control-wrap" data-name="menu-531"><select class="wpcf7-form-control wpcf7-select"
                                                 aria-invalid="false" name="intent">
-                                                <option value="1">kinh doanh</option>
-                                                <option value="2">mua sửa nhà</option>
-                                                <option value="3">mua ô tô</option>
-                                                <option value="4">đầu tư</option>
+                                                <option value="1">Chọn mục đính vay</option>
+                                                <option value="2">kinh doanh</option>
+                                                <option value="3">mua sửa nhà</option>
+                                                <option value="4">mua ô tô</option>
+                                                <option value="5">đầu tư</option>
                                             </select></span><br />
                                         <span class="wpcf7-form-control-wrap" data-name="text-842"><input size="40"
                                                 class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" aria-required="true" aria-invalid="false"
@@ -1395,6 +1478,10 @@
                                             </select></span><br />
                                         <input class="wpcf7-form-control has-spinner wpcf7-submit animation_btn submit_2" type="submit" value="Đăng ký miễn phí" />
                                     </p>
+                                    <div class="result_response">
+
+                                    </div>
+                                  
                                 </form>
                             </div>
 
