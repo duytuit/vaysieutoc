@@ -154,7 +154,7 @@ h6,
 
 .row_chovay ul li:before {
     content: "";
-    background-image: url(/wp-content/uploads/2023/03/check.svg);
+    background-image: url(./wp-content/uploads/2023/03/check.svg);
     width: 24px;
     height: 24px;
     top: 1px;
