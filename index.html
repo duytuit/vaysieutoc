@@ -509,7 +509,7 @@
                         "data": formObject
                         };
                         $.ajax(settings).done(function (response) {
-                            $('#' + e.target.getAttribute('id')).trigger("reset");
+                           $('#' + e.target.getAttribute('id')).trigger("reset");
                             if (response.code == 200) {
                                 $('#' + e.target.getAttribute('id')).find('.result_response').append('<div class="wpcf7-response-output" style="color: white;" aria-hidden="true">Xin cảm ơn, form đã được gửi thành công.</div>')
                             } else {
@@ -1359,6 +1359,7 @@
                                         </div>
                                         <form action="" method="post" id="wpcf7_form_1">
                                             <input type="hidden" name="projectId" value="3">
+                                            <input type="hidden" name="source" value="1">
                                             <h3>ĐĂNG KÝ ĐỂ NHẬN TƯ VẤN LÃI SUẤT VÀ HỒ SƠ
                                             </h3>
                                             <h4>Không hỗ trợ các khoản tiêu dùng tín chấp
@@ -1447,6 +1448,7 @@
                                 </div>
                                 <form action="" method="post" id="wpcf7_form_2">
                                     <input type="hidden" name="projectId" value="3">
+                                    <input type="hidden" name="source" value="1">
                                     <h3>ĐĂNG KÝ ĐỂ NHẬN TƯ VẤN LÃI SUẤT VÀ HỒ SƠ
                                     </h3>
                                     <h4>Không hỗ trợ các khoản tiêu dùng tín chấp
