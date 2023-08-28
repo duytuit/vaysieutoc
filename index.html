@@ -547,7 +547,20 @@
                     // }, "Hãy nhập password từ 8 đến 16 ký tự bao gồm chữ hoa, chữ thường và ít nhất một chữ số");
                 })
                 })(jQuery);
-                 
+                function mucDich(event){
+                    if(event.value == '2' || event.value == '3' || event.value == '4'){
+                        selectElement('tai_san', 2)
+                        selectElement('tai_san1', 2)
+                    }
+                    if(event.value == '5'){
+                        selectElement('tai_san', 3)
+                        selectElement('tai_san1', 3)
+                    }
+                }
+                function selectElement(id, valueToSelect) {    
+                    let element = document.getElementById(id);
+                    element.value = valueToSelect;
+                }  
     </script>
     <style>
         .bg {
@@ -1371,7 +1384,7 @@
                                                     <input size="40" class="wpcf7-form-control wpcf7-text wpcf7-tel wpcf7-validates-as-tel" aria-invalid="false" placeholder="Số điện thoại" value="" type="tel" name="phone" /></span><br
                                                 />
                                                 <span class="wpcf7-form-control-wrap" data-name="menu-531">
-                                                    <select class="wpcf7-form-control wpcf7-select" aria-invalid="false" name="intent">
+                                                    <select class="wpcf7-form-control wpcf7-select" aria-invalid="false" name="intent" onchange="mucDich(this)">
                                                         <option value="1">Chọn mục đính vay</option>
                                                         <option value="2">kinh doanh</option>
                                                         <option value="3">mua sửa nhà</option>
@@ -1384,7 +1397,7 @@
                                                     <input size="40" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" aria-required="true" aria-invalid="false" placeholder="Nhập số tiền cần" value="" type="text" name="amount" /></span><br
                                                 />
                                                 <span class="wpcf7-form-control-wrap" data-name="menu-543">
-                                                    <select class="wpcf7-form-control wpcf7-select" aria-invalid="false" name="asset">
+                                                    <select class="wpcf7-form-control wpcf7-select" aria-invalid="false" name="asset" id="tai_san">
                                                         <option value="1">Tài sản thế chấp</option>
                                                         <option value="2">Đất</option>
                                                         <option value="3">Nhà</option>
@@ -1461,7 +1474,7 @@
                                             <input size="40"
                                                 class="wpcf7-form-control wpcf7-text wpcf7-tel wpcf7-validates-as-tel" aria-invalid="false"
                                                 placeholder="Số điện thoại" value="" type="tel" name="phone" /></span><br />
-                                        <span class="wpcf7-form-control-wrap" data-name="menu-531"><select class="wpcf7-form-control wpcf7-select"
+                                        <span class="wpcf7-form-control-wrap" data-name="menu-531"><select class="wpcf7-form-control wpcf7-select" onchange="mucDich(this)"
                                                 aria-invalid="false" name="intent">
                                                 <option value="1">Chọn mục đính vay</option>
                                                 <option value="2">kinh doanh</option>
@@ -1473,7 +1486,7 @@
                                                 class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" aria-required="true" aria-invalid="false"
                                                 placeholder="Nhập số tiền cần" value="" type="text" name="amount" /></span><br />
                                         <span class="wpcf7-form-control-wrap" data-name="menu-543"><select class="wpcf7-form-control wpcf7-select"
-                                                aria-invalid="false" name="asset">
+                                                aria-invalid="false" name="asset" id="tai_san1">
                                                 <option value="1">Tài sản thế chấp</option>
                                                 <option value="2">Đất</option>
                                                 <option value="3">Nhà</option>
